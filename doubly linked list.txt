@@ -1,0 +1,151 @@
+// C++ program to implement doubly linked list using a class
+#include <bits/stdc++.h>
+using namespace std;
+
+// Node class to represent a node of doubly linked list.
+class DoublyLinkedListNode {
+  public:
+    int data;
+    DoublyLinkedListNode *next;
+    DoublyLinkedListNode *prev;
+
+    // Default constructor
+    DoublyLinkedListNode() {
+        data = 0;
+        next = NULL;
+        prev = NULL;
+    }
+
+    // Parameterised Constructor
+    DoublyLinkedListNode(int data) {
+        this->data = data;
+        this->next = NULL;
+        this->prev = NULL;
+    }
+};
+
+// Linked list class to implement a singly linked list
+class Linkedlist {
+    DoublyLinkedListNode *head;
+
+  public:
+    // Default constructor
+    Linkedlist() {
+        head = NULL;
+    }
+
+    // Function to insert a node at the start of the
+    // linked list
+    void insertAtHead(int data) {
+
+        // Create the new Node
+        DoublyLinkedListNode *newNode = new DoublyLinkedListNode(data);
+
+        // Assign to head of the list is empty
+        if (head == NULL) {
+            head = newNode;
+            return;
+        }
+
+        // Insert the newly created linked list at the head
+        newNode->next = this->head;
+        this->head = newNode;
+    }
+
+    //Iterative Function to print the linked list
+    void print() {
+        DoublyLinkedListNode *temp = head;
+
+        // Check for empty list
+        if (head == NULL) {
+            cout << "List empty" << endl;
+            return;
+        }
+
+        // Traverse the list
+        while (temp != NULL) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+    }
+
+    //Inserting a Node Into a Sorted Doubly Linked List
+    DoublyLinkedListNode* sortedInsert(DoublyLinkedListNode* head, int data) 
+    {
+        if(head == NULL)
+        {
+            DoublyLinkedListNode* newNode = new DoublyLinkedListNode(data);
+            return newNode;
+        }
+        //if the data is lesser than or equal to the head value
+        if(data <= head->data)
+        {
+            DoublyLinkedListNode* newNode = new DoublyLinkedListNode(data);
+            newNode->next = head;
+            head->prev = newNode;
+            return newNode;
+        }
+        //insert the node somewhere in the middle of the list
+        DoublyLinkedListNode* cur = head,*tail = head;
+        int f = 1;
+        while(cur){
+            tail = cur;
+            cur = cur->next;
+            if(cur and data >= tail->data and data <= cur->data)
+            {
+                DoublyLinkedListNode* newNode = new DoublyLinkedListNode(data);
+                tail->next = newNode;
+                newNode->prev =tail;
+                cur->prev = newNode;
+                newNode->next = cur;
+                f = 0;
+                break;
+            }
+        }
+        //if the data is greater than the last element of the linkedlist
+        if(f)
+        {
+            DoublyLinkedListNode* newNode = new DoublyLinkedListNode(data);
+            tail->next = newNode;
+            newNode->prev = tail;
+        }
+        return head;
+    }
+
+    //Reverse a doubly linked list
+    DoublyLinkedListNode* reverse(DoublyLinkedListNode* head) 
+    {
+        if(head == NULL)
+            return head;
+        DoublyLinkedListNode* tail = head,*cur = head;
+        while(cur)
+        {
+            tail = cur;
+            swap(cur->next,cur->prev);
+            //as next will be the prev due to the swap
+            cur = cur->prev;
+        }
+        return tail; 
+    }
+};
+
+int main() {
+
+    // Creating a LinkedList object
+    Linkedlist list;
+
+    // Inserting nodes
+    list.insertAtHead(4);
+    list.insertAtHead(3);
+    list.insertAtHead(2);
+    list.insertAtHead(1);
+
+    cout << "Elements of the list are: ";
+
+    // Print the list
+    list.print();
+    cout << endl;
+
+
+    return 0;
+}

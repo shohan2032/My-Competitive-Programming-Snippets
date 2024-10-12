@@ -1,0 +1,124 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define db long long
+#define ll long long
+#define int ll
+#define vi vector<int>
+#define vs vector<string>
+#define vl vector<ll>
+#define pii pair<int, int>
+#define vpi vector<pair<int, int>>
+#define vpl vector<pair<ll, ll>>
+#define vpd vector<pair<double, double>>
+#define vps vector<pair<string, string>>
+#define mp(x, y) make_pair(x, y)
+#define f first
+#define s second
+#define pb(x) push_back(x)
+#define pp(x) pop_back(x)
+#define loop1 for (i = 0; i < n; i++)
+#define loop2 for (j = 0; j < n; j++)
+#define fr(cont) for (auto &i : (cont))
+#define all(cont) cont.begin(), cont.end()
+#define rall(cont) cont.rbegin(), cont.rend()
+#define endl '\n'
+
+// constants...
+const double pi = acos(-1);
+const ll mod = 1000000007;//998244353
+const int MXS = 2e5 + 5;
+const ll MXI = 1e9 + 5;
+const ll MXL = 1e18 + 5;
+const ll INF = 1e9 + 5;
+const ll INFLL = 1e18 + 5;
+const ll eps = 1e-9;
+const int N = 200020;
+
+// functions...
+ll binmul(ll a, ll b, ll p)
+{
+    ll res = 0ll;
+    while (b)
+    {
+        if (b & 1)
+            res = (res + a) % p, b--;
+        else
+            a = (a + a) % p, b /= 2;
+    }
+    return res;
+} //(a*b)%p
+
+ll binpow(ll a, ll b, ll p)
+{
+    ll res = 1ll;
+    while (b)
+    {
+        if (b & 1)
+            res = binmul(res, a, p), b--;
+        else
+            a = binmul(a, a, p), b /= 2;
+    }
+    return res;
+} //(a^b)%
+
+ll inverse(ll a, ll p) 
+{
+    return binpow(a, p - 2, p); 
+} //(a^-1)%p == (a^p-2)%p
+
+
+ll power(ll a, ll b,ll M) {
+    if(!b) return 1;
+    ll temp = power(a, b / 2, M);
+    temp = 1LL * temp * temp % M;
+    if(b % 2) temp = 1LL * temp * a % M;
+    return temp;
+}
+ 
+ll fact[N];
+void pre() {
+    fact[0] = 1;
+    for(int i = 1; i < N; i++) {
+        fact[i] = 1LL * fact[i - 1] * i % mod;
+    }
+}
+ 
+ll ncr(ll n, ll r) {
+    if(n < r) return 0;
+    assert(n >= 0 && n < N && r >= 0 && r < N);
+    ll ans = fact[n];
+    ans = 1LL * ans * power(fact[n - r], mod - 2, mod) % mod;
+    ans = 1LL * ans * power(fact[r], mod - 2, mod) % mod;
+    if(ans < 0) ans += mod;
+    assert(ans >= 0 && ans < mod);
+    return ans;
+}
+
+void solve()
+{
+
+}   
+
+int32_t main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    // auto st = clock();
+    pre();
+    int t = 1;
+    //cin >> t;
+    for(int i = 1;i <= t;i++)
+    {
+        // cout << "Case " << i << ": ";
+        solve();
+    }
+
+    // cerr << 1.0*(clock()-st)/CLOCKS_PER_SEC << endl;
+    return 0;
+}
+/*Problem_link
+
+*/

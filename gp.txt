@@ -1,0 +1,80 @@
+=#include <bits/stdc++.h>
+using namespace std;
+#define pb push_back
+#define pf push_front
+#define endl '\n'
+#define fi first
+#define se second
+#define ll long long
+
+// generics programming
+// Normal class
+class FindMax_ {
+   public:
+   int a, b; 
+   FindMax_(int _a, int _b) {
+      a = _a;
+      b = _b;
+   }
+
+   int Max() {
+      return (a > b ? a : b);
+   }
+};
+// Generic class
+template<typename T>
+class FindMax {
+   public:
+   T a, b;
+   FindMax(T _a, T _b) {
+      a = _a;
+      b = _b;
+   }
+
+   T Max() {
+      return (a > b ? a : b);
+   }
+};
+
+// generic class for printing vector
+template<typename T>
+class PrintVector {
+   public:
+   T v;
+   PrintVector(T a) {
+      v = a;
+   }
+   void Print() {
+      for (auto it: v) cout << it << " ";
+      cout << endl;
+   }
+};
+int main()
+{
+   ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+   // Normal class declaration
+   FindMax_ ob(3, 4);
+   cout << ob.Max() << endl; // Output is 4
+
+   FindMax_ ob1(5.55, 5.56);
+   cout << ob1.Max() << endl; // output is 5 => Wrong output
+
+
+   // Generics class declaration
+   FindMax<int> ob2(5, 9);
+   cout << ob2.Max() << endl; // output is 9
+   
+   FindMax<double> ob3(5.55, 5.56);
+   cout << ob3.Max() << endl; // output is 5.56
+
+   // Passing a vector(a generic class) & Printing it using generic class
+   // We can pass any datatype (primitive - int, double etc, or user-defined like classes, stl classes etc)
+
+   vector<int> v(10);
+   iota(v.begin(), v.end(), 1); // assign vector from 1-10
+   PrintVector<vector<int>> p(v);
+   p.Print();
+
+
+   return 0;
+}

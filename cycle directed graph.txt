@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int N = 2e5 + 9;
+vector<int> g[N];
+int col[N], par[N];
+bool cycle;
+deque<int>path;
+int f = 1,l = 0;
+void dfs(int u) {
+    if(f)
+        path.push_back(u);
+    col[u] = 1;
+    for (auto v: g[u]){
+        if (col[v] == 0){
+            par[v] = u;
+            dfs(v);
+        }
+        else if (col[v] == 1) {
+            cycle = true;
+            // you can track the cycle using par array
+            f = 0;
+            if(l == 0)
+                l = v;
+        }
+    }
+    col[u] = 2;//je shokol node theke cycle create kora possible hobe na tader color 2 hoye jabe.That is kono node er jonno or adjacent list visit kora ses but kono cycle pai nai,oi khetre oi node er color 2 hoiye jabe
+}
+int32_t main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int n, m; cin >>n;
+    for (int i = 1; i <= n; i++) {//i theke u te jabe
+        int u; 
+        cin >> u;
+        g[i].push_back(u);
+    }
+    cycle = false;
+    vector<int> ans;
+    for (int i = 1; i <= n; i++) {
+        if (col[i] == 0)dfs(i);
+        if(cycle)
+        {
+            while(path.front() != l and !path.empty())
+                path.pop_front();
+            cout << path.size() << endl;
+            for(auto &i:path)
+                cout << i << " ";//printing cycle path
+            break;   
+        }
+    }
+    return 0;
+}
+/*
+    problem link:https://atcoder.jp/contests/abc311/tasks/abc311_c
+*/

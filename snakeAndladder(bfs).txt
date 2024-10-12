@@ -1,0 +1,97 @@
+int n;
+int row(int x)
+{
+    int r = x/n;
+    if(x % n == 0)
+        r--;
+    r = n-(r+1);
+    return  r;
+}
+int col(int r,int x)
+{
+    if(n%2==0)
+    {
+        int c;
+        if(r % 2 == 0)
+        {
+            c = n-(x%n);
+            if(x%n == 0)
+                c = 0;
+        }
+        else
+        {
+            c = x%n;
+            if(!c)
+                c = n;
+            c--;
+        }
+        return c;
+    }
+    else
+    {
+        int c;
+        if(r % 2 == 0)
+        {
+            c = x%n;
+            if(!c)
+                c = n;
+            c--;
+        }
+        else
+        {
+            c = n-(x%n);
+            if(x%n == 0)
+                c = 0;
+        }
+        return c;
+    }
+}
+int bfs(int u,vector<vector<int>>& board)
+{
+    int vis[1000] = {};
+    vis[u] = 1;
+    queue<int>pq;
+    pq.push(u);
+    int moves[1000] = {};
+    while(!pq.empty())
+    {
+        int cur = pq.front();
+        pq.pop();
+        for(int i = cur+1;i <= min(cur+6,n*n);i++)
+        {
+            
+                // cout << cur << "->" << i << endl;
+                int next = i;
+                int r = row(next);
+                int c = col(r,next);
+                // cout << r << " " << c << endl;
+                if(board[r][c] != -1)
+                    next = board[r][c];
+                cout << cur << "-->" << next << endl;
+                if(!vis[next])
+                {
+                    vis[next] = 1;
+                    pq.push(next);
+                    moves[next] = cur;
+                }
+            
+        }
+    }
+    int x = n*n;
+    vector<int> path;
+    while(moves[x])
+    {
+        path.push_back(x);
+        x = moves[x];
+    }
+    if(path.size())
+        return path.size();
+    return -1;
+}
+class Solution {
+public:
+    int snakesAndLadders(vector<vector<int>>& board) {
+        n = board.size();
+        return bfs(1,board);
+    }
+};

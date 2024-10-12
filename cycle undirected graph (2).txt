@@ -1,0 +1,121 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define db long long
+#define ll long long
+#define int ll
+#define vi vector<int>
+#define vs vector<string>
+#define vpi vector<pair<int, int>>
+#define vpd vector<pair<double, double>>
+#define vps vector<pair<string, string>>
+#define mp(x, y) make_pair(x, y)
+#define pb(x) push_back(x)
+#define pp(x) pop_back(x)
+#define fr(cont) for (auto &i : (cont))
+#define all(cont) cont.begin(), cont.end()
+#define rall(cont) cont.rbegin(), cont.rend()
+
+const int N = 2e5 + 9;
+bool vis[N];
+vector<int> g[N];
+int f;
+bool cycle;
+void dfs(int u,int p){
+    vis[u] = 1;
+    for (auto v: g[u]){
+        if(vis[v] and v == p)
+            continue;
+        if(vis[v]){
+            if(!f)
+                f = u;//u theke v er moddhe fist cycle ta belong kore.only first cycle ta detect korar jonno ei logic.f er moddhe ending node ta thakbe
+            cycle = true;
+        }
+        else
+            dfs(v,u);
+    }
+
+}
+vi path;
+bool found;
+void cycle_path(int s,int e)//if we have the starting node and the ending node of a cylce then we can find cycle path by using this function 
+{
+    // cout <<s << "--> ";
+    vis[s] = 1;
+    if(s == e)
+    {
+        found = true;
+        path.pb(s);
+        return;
+    }
+    path.pb(s);
+    fr(g[s])
+    {
+        if(vis[i] or found)
+            continue;
+        cycle_path(i,e);
+    }
+    if(!found)
+        path.pop_back();
+}
+
+void solve()
+{
+    int n,e;
+    cin >>n >> e;
+    for (int i = 1; i <= e; i++) {
+        int u,v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
+    cycle = false;
+    int s_n,e_n;//dsu diyeo s_n and e_n ber kora jabe
+    for(int i = 1;i <= n;i++)
+    {
+        if(!vis[i]){
+            dfs(i,0);
+            if(cycle)
+            {
+                s_n = i;
+                e_n = f;
+                break;
+            }
+        }
+    }
+    if(cycle)
+    {
+        cout << "Cycle ache"<< endl;
+        for(int i = 1;i <= n;i++)
+            vis[i] = false;
+        cycle_path(s_n,e_n);
+        cout << path.size() << endl;
+        fr(path)
+            cout << i<<" ";
+        cout << endl;
+    }
+    else    
+        cout << "Cycle Nai" << endl;
+    /*
+        TC:
+            5 6
+            1 2
+            2 3
+            3 4
+            4 5
+            5 1
+    */
+}
+int32_t main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    int t = 1;
+    //cin >> t;
+    while(t--)
+        solve();
+    return 0;
+}
+/*
+    undirected graph er cycle er upor depend kore banano problem:
+    https://codeforces.com/contest/1873/problem/H
+*/

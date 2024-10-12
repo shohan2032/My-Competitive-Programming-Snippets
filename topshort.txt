@@ -1,0 +1,114 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define db long long
+#define ll long long
+#define vi vector<int>
+#define vs vector<string>
+#define vl vector<ll>
+#define pii pair<int, int>
+#define vpi vector<pair<int, int>>
+#define vpl vector<pair<ll, ll>>
+#define vpd vector<pair<double, double>>
+#define vps vector<pair<string, string>>
+#define mp(x, y) make_pair(x, y)
+#define f first
+#define s second
+#define pb(x) push_back(x)
+#define pp(x) pop_back(x)
+#define fr(cont) for (auto &i : (cont))
+#define all(cont) cont.begin(), cont.end()
+#define rall(cont) cont.rbegin(), cont.rend()
+
+//topshort fast -->TC(v+e)
+const int N = 100;
+int indeg[N];
+vi ad_list[N];
+bool vis[N];
+
+void solve()
+{
+    int v,e;
+    cin >> v >> e;
+    while(e--)
+    {
+        int u,v;
+        cin>> u >> v;//age u er kaj ,then v er kaj hobe.u --> v
+        indeg[v]++;
+        ad_list[u].pb(v);
+    }
+    vi ans,in_deg_zero;
+    for(int i = 1;i <= v;i++)
+    {
+        if(indeg[i] == 0)
+        {
+            in_deg_zero.pb(i);
+            // vis[i] = true;
+        }
+    }
+    while(ans.size() < v)//ei khane v bar choltese
+    {
+        if(in_deg_zero.empty())
+        {
+            cout << "IMPOSSIBLE" << endl;
+            return;
+        }
+        int cur;
+        cur = in_deg_zero.back();
+        in_deg_zero.pop_back();
+        ans.pb(cur);
+        vis[cur] = true;//eita 47 number line a kore dileo hoito
+        fr(ad_list[cur]){
+            indeg[i]--;
+            if(!vis[i] and indeg[i] == 0)
+            {
+                in_deg_zero.pb(i);
+                vis[i] = true;
+            }
+        }
+    }
+    fr(ans)
+        cout << i << " ";
+    
+    /*
+        TC
+        3 3
+        1 2
+        2 3
+        3 1 
+        IMPOSSIBLE CZ THE GRAPH IS  CYCLIC..TOPSHORT ONLY POSSIBLE IN 
+        DIRECTED UNCYCLIC GRAPH
+
+        3 2
+        2 1
+        2 3
+        ANS :2 --> 1 --> 3
+
+        4 5
+        1 3
+        1 4
+        4 2
+        4 3
+        2 3
+        ANS :1 --> 4 --> 2 --> 3
+    */
+}   
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    // auto st = clock();
+    int t = 1;
+    // cin >> t;
+    while (t--)
+        solve();
+
+    // cerr << 1.0*(clock()-st)/CLOCKS_PER_SEC << endl;
+    return 0;
+}
+/*Problem_link
+
+*/

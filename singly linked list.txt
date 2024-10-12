@@ -1,0 +1,286 @@
+// C++ program to implement singly linked list using a class
+#include <bits/stdc++.h>
+using namespace std;
+
+// Node class to represent a node of singly linked list.
+class SinglyLinkedListNode {
+  public:
+    int data;
+    SinglyLinkedListNode *next;
+
+    // Default constructor
+    SinglyLinkedListNode() {
+        data = 0;
+        next = NULL;
+    }
+
+    // Parameterised Constructor
+    SinglyLinkedListNode(int data) {
+        this->data = data;
+        this->next = NULL;
+    }
+};
+
+// Linked list class to implement a singly linked list
+class Linkedlist {
+    SinglyLinkedListNode *head;
+
+  public:
+    // Default constructor
+    Linkedlist() {
+        head = NULL;
+    }
+
+    // Function to insert a node at the start of the
+    // linked list
+    void insertAtHead(int data) {
+
+        // Create the new Node
+        SinglyLinkedListNode *newNode = new SinglyLinkedListNode(data);
+
+        // Assign to head of the list is empty
+        if (head == NULL) {
+            head = newNode;
+            return;
+        }
+
+        // Insert the newly created linked list at the head
+        newNode->next = this->head;
+        this->head = newNode;
+    }
+
+    //Iterative Function to print the linked list
+    void print() {
+        SinglyLinkedListNode *temp = head;
+
+        // Check for empty list
+        if (head == NULL) {
+            cout << "List empty" << endl;
+            return;
+        }
+
+        // Traverse the list
+        while (temp != NULL) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+    }
+
+    // Reverse the order of the nodes in the linked list in-place and return the new head of the reversed linked list.
+    SinglyLinkedListNode* reverseList(SinglyLinkedListNode* head) {
+        SinglyLinkedListNode* prev = NULL,*curr = head,*temp;
+        while(curr)
+        {
+            temp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        head = prev;
+        return head;
+    }
+
+    //Recersively reverse the linked list in-place and return the new head of the reversed linked list.
+    SinglyLinkedListNode* recReverse(SinglyLinkedListNode* cur,SinglyLinkedListNode* prev)
+    {
+        if(cur == NULL)
+            return prev;
+        SinglyLinkedListNode* next = cur->next;
+        cur->next = prev;
+        return recReverse(next,cur);
+    }
+
+    // a -> b -> c -> d -> e -> f
+    // x -> y -> z
+    // after zipperring this two linkedlist = a -> x -> b -> y -> c -> z -> d -> e -> f
+    SinglyLinkedListNode* zipperLists(SinglyLinkedListNode* head1, SinglyLinkedListNode* head2) {
+        SinglyLinkedListNode* head = head1,*temp;
+        int state = 1;
+        while(head1 and head2)
+        {
+            if(state&1)
+            {
+                temp = head1->next;
+                head1->next = head2;
+                head1 = temp;
+            }
+            else
+            {
+                temp = head2->next;
+                head2->next = head1;
+                head2 = temp;
+            }
+            state++;
+        }
+        return head;
+    }
+
+    SinglyLinkedListNode* insertNodeAtPosition(SinglyLinkedListNode* list, int data, int position)
+    {
+        if(list==NULL)
+        {
+            SinglyLinkedListNode *newNode = new SinglyLinkedListNode(data);
+            return newNode;
+        }
+        if(position == 0)
+        {
+            SinglyLinkedListNode *newNode = new SinglyLinkedListNode(data);
+            newNode->next = list;
+            return newNode;
+        }
+        SinglyLinkedListNode* leftNodeBeforePosition = list;
+        for(int i = 1;i < position;i++)
+                leftNodeBeforePosition = leftNodeBeforePosition->next;
+        SinglyLinkedListNode *newNode = new SinglyLinkedListNode(data);
+        newNode->next = leftNodeBeforePosition->next;
+        leftNodeBeforePosition->next = newNode;
+        return list;
+    }
+
+    //delete a node when the specific node is given
+    void deleteNode(SinglyLinkedListNode *node)//tc->O(1),sc->O(1)
+    {
+        int val = node->next->data;
+        node->next = node->next->next;
+        node->data = val;
+    }
+
+    //delete a node when the position of the node is given
+    SinglyLinkedListNode* deleteNode(SinglyLinkedListNode* head, int position) {
+        if(position == 0)
+            return head->next;
+        SinglyLinkedListNode* cur = head,*tail;
+        for(int i = 1;i <= position;i++)
+        {
+            tail = cur;
+            cur = cur->next;
+        }
+        tail->next = cur->next;
+        return head;
+    }
+
+    //It uses the Floyd's Cycle Detection Algorithm (Tortoise and Hare)
+    bool hasCycle(SinglyLinkedListNode *head) {//tc->O(n),sc->O(1)
+        //empty linkedList
+        if(head == NULL)
+            return false;
+        
+        SinglyLinkedListNode* slow = head,*fast =head;
+        while(fast and fast->next)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+            if(slow==fast)
+                return true;
+        }
+        //return slow;When we need the middle node of a Linkedlist
+        return false;
+    }
+
+    //merge two sorted list
+    SinglyLinkedListNode* mergeLists(SinglyLinkedListNode* head1, SinglyLinkedListNode* head2) 
+    {
+        if(head1 == NULL)
+            return head2;
+        if(head2 == NULL)
+            return head1;
+        
+        SinglyLinkedListNode* newNode = new SinglyLinkedListNode(0);
+        SinglyLinkedListNode* tail = newNode;
+        while(head1 and head2)
+        {
+            if(head1->data <= head2->data)
+            {
+                tail->next = head1;
+                head1 = head1->next;
+            }
+            else {
+                tail->next = head2;
+                head2 = head2->next;
+            }
+            tail = tail->next;
+        }
+        if(head1)
+            tail->next = head1;
+        if(head2)
+            tail->next = head2;
+        return newNode->next;
+    }
+
+    //Delete duplicate-value nodes from a sorted Singly linked list
+    SinglyLinkedListNode* removeDuplicates(SinglyLinkedListNode* head) 
+    {
+        if(head == NULL)
+            return head;
+        SinglyLinkedListNode* cur = head,*tail = head;
+        while(cur)
+        {
+            if(cur->data != tail->data)
+            {
+                tail->next = cur;
+                tail = cur;
+            }
+            cur = cur->next;
+        }
+        tail->next = NULL;
+        return head;
+    }
+
+    //Find Merge Point of Two Singly Linked List
+    int findMergeNode(SinglyLinkedListNode* head1, SinglyLinkedListNode* head2) 
+    {
+        int l1 = 0,l2 = 0;
+        SinglyLinkedListNode* cur1 = head1,*cur2 = head2;
+        while(cur1)
+        {
+            l1++;
+            cur1 = cur1->next;
+        }
+        while(cur2)
+        {
+            l2++;
+            cur2 = cur2->next;
+        }
+        cur1 = head1;
+        cur2 = head2;
+        if(l1 > l2)
+        {
+            int extra = l1-l2;
+            while(cur1 and extra--)
+                cur1 = cur1->next;
+        }
+        else
+        {
+            int extra = l2-l1;
+            while(cur2 and extra--)
+                cur2 = cur2->next;
+        }
+        while(cur1!=cur2)
+        {
+            cur1 = cur1->next;
+            cur2 = cur2->next;
+        }
+        return cur1->data;
+    }
+};
+
+int main() {
+
+    // Creating a LinkedList object
+    Linkedlist list;
+
+    // Inserting nodes
+    list.insertAtHead(4);
+    list.insertAtHead(3);
+    list.insertAtHead(2);
+    list.insertAtHead(1);
+
+    cout << "Elements of the list are: ";
+
+    // Print the list
+    list.print();
+    cout << endl;
+
+
+    return 0;
+}
